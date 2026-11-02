@@ -10,6 +10,29 @@
 
 ---
 
+## How to run project
+
+1. Create virtual env
+2. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+3. Copy instance-file into your own `.env`:
+```bash
+cp .env.example .env
+```
+4. Create and apply migrations
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+5. Run the server
+```bash
+python manage.py runserver
+```
+
+---
+
 ## DB schema
 + `users` - користувачі (id, username, email, first_name, last_name, is_staff, created_at).
 + `categories` - жанри/механіки ігор (id, name, slug, description).

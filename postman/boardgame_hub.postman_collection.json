@@ -1,0 +1,194 @@
+{
+  "info": {
+    "_postman_id": "c1f7b8e2-9d3a-4a11-b2c3-9876543210ab",
+    "name": "BoardGame Hub API",
+    "description": "Колекція запитів для тестування CRUD операцій, бізнес-валідації та обробки помилок",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api/v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get Categories List",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/categories/", "host": ["{{base_url}}"], "path": ["categories", ""] }
+          },
+          "response": [
+            {
+              "name": "200 OK - Categories List",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "[{\"id\": 1, \"name\": \"Стратегія\", \"slug\": \"strategy\", \"description\": \"Тактичні настільні ігри\"}]"
+            }
+          ]
+        },
+        {
+          "name": "Create Category (Success)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Кооперативні\",\n    \"slug\": \"coop\",\n    \"description\": \"Ігри для спільної перемоги\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/categories/", "host": ["{{base_url}}"], "path": ["categories", ""] }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "body": "{\"id\": 2, \"name\": \"Кооперативні\", \"slug\": \"coop\", \"description\": \"Ігри для спільної перемоги\"}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Category with Linked Games (Protected Error)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/categories/1/", "host": ["{{base_url}}"], "path": ["categories", "1", ""] }
+          },
+          "response": [
+            {
+              "name": "400 Bad Request - ProtectedError",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\"status\": \"error\", \"message\": \"Неможливо видалити категорію, оскільки до неї прив'язані настільні ігри\", \"errors\": null}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Publishers",
+      "item": [
+        {
+          "name": "Get Publishers List",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/publishers/", "host": ["{{base_url}}"], "path": ["publishers", ""] }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "[{\"id\": 1, \"name\": \"Geekach Games\", \"country\": \"Україна\", \"website\": \"https://geekach.com.ua\", \"description\": \"Локалізатор\"}]"
+            }
+          ]
+        },
+        {
+          "name": "Get Publisher Detail with Games",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/publishers/1/", "host": ["{{base_url}}"], "path": ["publishers", "1", ""] }
+          },
+          "response": [
+            {
+              "name": "200 OK with Games",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\"id\": 1, \"name\": \"Geekach Games\", \"country\": \"Україна\", \"website\": \"https://geekach.com.ua\", \"description\": \"Локалізатор\", \"games\": [{\"id\": 1, \"title\": \"Catan\", \"price\": \"1450.00\", \"rating\": 4.8}]}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Board Games",
+      "item": [
+        {
+          "name": "Get Games List (Search & Filter)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/games/?search=Catan&ordering=-price",
+              "host": ["{{base_url}}"],
+              "path": ["games", ""],
+              "query": [
+                { "key": "search", "value": "Catan" },
+                { "key": "ordering", "value": "-price" }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "[{\"id\": 1, \"title\": \"Catan: Колонізатори\", \"price\": \"1450.00\", \"min_players\": 3, \"max_players\": 4, \"rating\": 4.8, \"category\": {\"id\": 1, \"name\": \"Стратегія\"}, \"publisher\": {\"id\": 1, \"name\": \"Geekach Games\"}}]"
+            }
+          ]
+        },
+        {
+          "name": "Get Game by ID (404 Not Found)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/games/999/", "host": ["{{base_url}}"], "path": ["games", "999", ""] }
+          },
+          "response": [
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "body": "{\"status\": \"error\", \"message\": \"Гру з ID 999 не знайдено\", \"errors\": null}"
+            }
+          ]
+        },
+        {
+          "name": "Create Game (Validation Error 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Некоректна гра\",\n    \"description\": \"Тест валідації\",\n    \"price\": -50.00,\n    \"min_players\": 5,\n    \"max_players\": 2,\n    \"play_time_minutes\": 0,\n    \"min_age\": 8,\n    \"release_year\": 2024,\n    \"category_id\": 1,\n    \"publisher_id\": 1\n}"
+            },
+            "url": { "raw": "{{base_url}}/games/", "host": ["{{base_url}}"], "path": ["games", ""] }
+          },
+          "response": [
+            {
+              "name": "400 Bad Request - Validation",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\"status\": \"error\", \"message\": \"Некоректні дані для створення гри\", \"errors\": {\"price\": [\"Ціна гри повинна бути більшою за нуль\"], \"play_time_minutes\": [\"Тривалість партії має бути додатною\"], \"min_players\": [\"Мінімальна кількість гравців не може бути більшою за максимальну\"]}}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Game (204 No Content)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/games/1/", "host": ["{{base_url}}"], "path": ["games", "1", ""] }
+          },
+          "response": [
+            {
+              "name": "204 No Content",
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "plain",
+              "body": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
