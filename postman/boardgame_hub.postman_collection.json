@@ -1,9 +1,10 @@
 {
   "info": {
-    "_postman_id": "c1f7b8e2-9d3a-4a11-b2c3-9876543210ab",
+    "_postman_id": "cf0b6607-a247-4a6b-8d04-c595011b0dbb",
     "name": "BoardGame Hub API",
     "description": "Колекція запитів для тестування CRUD операцій, бізнес-валідації та обробки помилок",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_collection_link": "https://go.postman.co/collection/59254071-cf0b6607-a247-4a6b-8d04-c595011b0dbb?source=collection_link"
   },
   "variable": [
     {
@@ -13,6 +14,531 @@
     }
   ],
   "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "register success",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "name": "register success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"username\": \"gamer_demo\",\r\n  \"email\": \"gamer_demo@example.com\",\r\n  \"password\": \"Password123!\",\r\n  \"password_confirmation\": \"Password123!\",\r\n  \"first_name\": \"Іван\",\r\n  \"last_name\": \"Франко\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/register/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register",
+                    ""
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 09 Nov 2026 15:47:18 GMT"
+                },
+                {
+                  "key": "server",
+                  "value": "WSGIServer/0.2 CPython/3.14.7"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "allow",
+                  "value": "POST, OPTIONS"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-length",
+                  "value": "221"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Ви успішно зареєстровані.\",\n  \"user\": {\n    \"id\": 1,\n    \"username\": \"gamer_demo\",\n    \"email\": \"gamer_demo@example.com\",\n    \"first_name\": \"Іван\",\n    \"last_name\": \"Франко\",\n    \"is_staff\": false\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "register fail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "name": "register fail",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"username\": \"gamer_bad\",\r\n  \"email\": \"bad@example.com\",\r\n  \"password\": \"Password123!\",\r\n  \"password_confirmation\": \"DifferentPass456!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/register/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register",
+                    ""
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 09 Nov 2026 15:50:16 GMT"
+                },
+                {
+                  "key": "server",
+                  "value": "WSGIServer/0.2 CPython/3.14.7"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "allow",
+                  "value": "POST, OPTIONS"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-length",
+                  "value": "191"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"error\",\n  \"message\": \"Виникла помилка при валідації реєстрування\",\n  \"errors\": {\n    \"password_confirmation\": [\n      \"Паролі не співпадають\"\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "login success",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "name": "login success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"username\": \"gamer_demo\",\r\n  \"password\": \"Password123!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/login/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 09 Nov 2026 16:14:05 GMT"
+                },
+                {
+                  "key": "server",
+                  "value": "WSGIServer/0.2 CPython/3.14.7"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "allow",
+                  "value": "POST, OPTIONS"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-length",
+                  "value": "489"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NDMyNzI0NSwiaWF0IjoxNzk0MjQwODQ1LCJqdGkiOiI3MGZiYmE2M2NlYjQ0MzQzYWE0OWJkMjUzN2YyYWVjNiIsInVzZXJfaWQiOiIxIn0.yGh4_o3rUr707xO-_itrVL59G7DcU2gl1_YQVlZrsfo\",\n  \"access\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk0MjQxNDQ1LCJpYXQiOjE3OTQyNDA4NDUsImp0aSI6ImM0MTdiNGJmNTVjYTQ5YmFhNmZmY2NkOWM4OWU0YjNjIiwidXNlcl9pZCI6IjEifQ.yqKpJHRYdMXyfIYvCLc3I2NpEC486Q6dvrFAu56fWek\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "login fail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "name": "login fail",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"gamer_demo\",\r\n    \"password\": \"Passfsdfsdfword123!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/login/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login",
+                    ""
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 09 Nov 2026 15:54:20 GMT"
+                },
+                {
+                  "key": "server",
+                  "value": "WSGIServer/0.2 CPython/3.14.7"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "www-authenticate",
+                  "value": "Bearer realm=\"api\""
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "allow",
+                  "value": "POST, OPTIONS"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-length",
+                  "value": "93"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"ERR\",\n  \"message\": \"No active account found with the given credentials\",\n  \"errors\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "refresh success",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "name": "refresh success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NDMyNTkyOCwiaWF0IjoxNzk0MjM5NTI4LCJqdGkiOiI1NjVlNGY5NGJkODU0NTBlYTY0OWUxMzJhN2YwMzA1ZCIsInVzZXJfaWQiOiIxIn0.NLzcygc_Ti1ZVjU3LjFtFi5jBLf8qlpu7poWQhykyGc\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/refresh/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 09 Nov 2026 15:56:41 GMT"
+                },
+                {
+                  "key": "server",
+                  "value": "WSGIServer/0.2 CPython/3.14.7"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "allow",
+                  "value": "POST, OPTIONS"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-length",
+                  "value": "489"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"access\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk0MjQwNDAxLCJpYXQiOjE3OTQyMzk4MDEsImp0aSI6IjZlMjRiOTM5MWI3MTQzYTliOTg5YWFiNjQxMTAyODFhIiwidXNlcl9pZCI6IjEifQ.jwG4aYMP0PxpG5L7mbnEmZFR77dg6eFy7Rcf7q6vYFQ\",\n  \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NDMyNjIwMSwiaWF0IjoxNzk0MjM5ODAxLCJqdGkiOiI1NTQzZTgzMmI2MTM0ZmU4OTU3N2QwYjA1ZWVlYjgxZSIsInVzZXJfaWQiOiIxIn0.cO2hf_vWCZT4YzB_09PRpSVUi3txAQnm0KzAhMF8I8s\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "logout success",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "name": "logout success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NDMyNzI0NSwiaWF0IjoxNzk0MjQwODQ1LCJqdGkiOiI3MGZiYmE2M2NlYjQ0MzQzYWE0OWJkMjUzN2YyYWVjNiIsInVzZXJfaWQiOiIxIn0.yGh4_o3rUr707xO-_itrVL59G7DcU2gl1_YQVlZrsfo\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/logout/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 09 Nov 2026 16:14:47 GMT"
+                },
+                {
+                  "key": "server",
+                  "value": "WSGIServer/0.2 CPython/3.14.7"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "allow",
+                  "value": "POST, OPTIONS"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "content-length",
+                  "value": "78"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"success\",\n  \"message\": \"Ви успішно лог-аутнулись\"\n}"
+            }
+          ]
+        }
+      ]
+    },
     {
       "name": "Categories",
       "item": [
