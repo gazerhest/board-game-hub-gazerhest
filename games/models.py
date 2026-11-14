@@ -19,7 +19,7 @@ class Publisher(models.Model):
     description = models.TextField(blank=True)
 
     class Meta:
-            ordering = ['name']
+        ordering = ['name']
 
     def __str__(self):
         return f"{self.name} ({self.country})"
@@ -31,7 +31,7 @@ class Designer(models.Model):
     bio = models.TextField(blank=True)
 
     class Meta:
-            ordering = ['first_name', 'last_name']
+        ordering = ['first_name', 'last_name']
 
     @property
     def full_name(self):

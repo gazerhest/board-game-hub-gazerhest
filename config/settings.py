@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 """
 Django settings for config project.
 
@@ -44,6 +46,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'games',
+    'users',
+    'rest_framework_simplejwt.token_blacklist'
 ]
 
 MIDDLEWARE = [
@@ -140,3 +144,17 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:63342",   # JetBrains/PyCharm
     "http://127.0.0.1:63342",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+    'EXCEPTION_HANDLER': 'config.exceptions.custom_exception_handler',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'SIGNING_KEY': os.getenv('JWT_SECRET_KEY'),
+}

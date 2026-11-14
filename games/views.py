@@ -11,7 +11,7 @@ from .serializers import (
     DesignerDetailSerializer,
     BoardGameSerializer
 )
-
+from .permissions import IsAdminOrReadOnly
 
 def error_response(message, errors=None, status_code=status.HTTP_400_BAD_REQUEST):
     return Response({
@@ -22,8 +22,9 @@ def error_response(message, errors=None, status_code=status.HTTP_400_BAD_REQUEST
 
 
 class CategoryListCreateAPIView(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
-        categories = Category.objects.all();
+        categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -36,6 +37,7 @@ class CategoryListCreateAPIView(APIView):
 
 
 class CategoryDetailAPIView(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get_object(self, pk):
         try:
             return Category.objects.get(pk=pk)
@@ -84,6 +86,7 @@ class CategoryDetailAPIView(APIView):
 
 
 class PublisherListCreateAPIView(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
         publishers = Publisher.objects.all()
         serializer = PublisherSerializer(publishers, many=True)
@@ -98,6 +101,7 @@ class PublisherListCreateAPIView(APIView):
 
 
 class PublisherDetailAPIView(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get_object(self, pk):
         try:
             return Publisher.objects.prefetch_related('games').get(pk=pk)
@@ -144,6 +148,7 @@ class PublisherDetailAPIView(APIView):
             )
         
 class DesignerListCreateAPIView(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
         designers = Designer.objects.all()
         serializer = DesignerSerializer(designers, many=True)
@@ -158,6 +163,7 @@ class DesignerListCreateAPIView(APIView):
 
 
 class DesignerDetailAPIView(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get_object(self, pk):
         try:
             return Designer.objects.prefetch_related('games').get(pk=pk)
@@ -200,6 +206,7 @@ class DesignerDetailAPIView(APIView):
 
 
 class BoardGameListCreateAPIView(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
         queryset = BoardGame.objects.select_related('category', 'publisher', 'designer').all()
 
@@ -241,6 +248,7 @@ class BoardGameListCreateAPIView(APIView):
 
 
 class BoardGameDetailAPIView(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get_object(self, pk):
         try:
             return BoardGame.objects.select_related('category', 'publisher', 'designer').get(pk=pk)

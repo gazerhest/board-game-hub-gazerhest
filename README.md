@@ -3,10 +3,10 @@
 ## Основний функціонал
 + Каталог настільних ігор - перегляд ігор із пошуком за назвою, фільтрацією за видавництвами, дизайнерами, жанрами/механіками, кількістю гравців, віковими обмеженнями та сортуванням (за ціною, популярністю, рейтингом) і т.д.
 + Картки видавництв та авторів - можливість перегляду каталогу ігор, згрупованих за конкретним українським чи міжнародним видавництвом або автором гри.
-+ Автентифікація & профілі - реєстрація, вхід, перегляд/редагування особистих даних юзера.
 + Кошик і замовлення - якщо юзер авторизований, він може додавати товари до кошика, змінювати к-сть та робити замовлення з фіксацією ціни на момент покупки.
 + Адміністративне управління CRUD - create/read/update/delete цих ігор та видавництв і т.д.
 + Загальна інформація - сторінка контактів, правил на доставку, повернення товару.
++ Автентифікація через JWT-токен
 
 ---
 
@@ -60,7 +60,125 @@ python manage.py runserver
 
 ---
 
+## Доступ до закритих ендпоінтів
+Для доступу до них клієнт має надати (перед цим отриманий) access токен в кожному запиті в заголовку Authorization:
+`Authorization: Bearer <example_access_t>`
+
+## Ролі та доступ
+Щодо каталогу - всім (і неавторизованим тоже) користувачам доступний метод GET щодо всіх головних ендпоінтів, зв'язаних з тематикою ігор
+всі решта методів - для ролі адміністраторів (GET звісно також дозволяється)
+
+# Помилки доступу
+Якщо користувач неавторизований (себто не має токена, ні access, ні refresh), повертається 401-Код
+Якщо запит надісланий ЗАЛОГІНЕНИМ користувачем методами, які дозволені лише адміністраторам, викидається з 403-кодом
+
 ## Ендпоінти
+# Ендпоінти authN
+* реєстрація
+  * Метод: `POST`
+  * URL: `/api/v1/auth/register/`
+  * Доступ: public
+  * request body JSON:
+  ```json
+  {
+    "username": "boardgamer",
+    "email": "user@example.com",
+    "password": "SecurePassword123!",
+    "password_confirmation": "SecurePassword123!",
+    "first_name": "Тарас",
+    "last_name": "Шевченко"
+  }
+  ```
+  * Валідація: умови дотримано
+  * SUCCESS 201:
+  ```JSON
+  {
+    "status": "success",
+    "message": "Ви успішно зареєстровані.",
+    "user": {
+      "id": 2,
+      "username": "boardgamer",
+      "email": "user@example.com",
+      "first_name": "Тарас",
+      "last_name": "Шевченко",
+      "is_staff": false
+    }
+  }
+  ```
+  * FAILURE 400:
+  ```JSON
+  {
+    "status": "error",
+    "message": "Виникла помилка при валідації реєстрування",
+    "errors": {
+      "password_confirmation": ["Паролі не співпадають"],
+      "email": ["Некоректна електронна пошта"]
+    }
+  }
+  ```
+
+* Login (refresh/access):
+  * Метод: `POST`
+  * URL: `/api/v1/auth/login/`
+  * Доступ: public
+  * request body JSON:
+  ```JSON
+  {
+    "username": "boardgamer",
+    "password": "SecurePassword123!"
+  }
+  ```
+  * SUCCESS 200:
+  ```JSON
+  {
+    "access": "abcdeABCDE...",
+    "refresh": "ABCDEabcde..."
+  }
+  ```
+  * FAILURE 401:
+  ```JSON
+  {
+    "status": "error",
+    "message": "No active account found with the given credentials",
+    "errors": null
+  }
+  ```
+
+* access через refresh токен
+  * Метод: `POST`
+  * URL: `/api/v1/auth/refresh/`
+  * Доступ: public
+  * request body JSON:
+  ```JSON
+  {
+    "refresh": "abcdeandf..."
+  }
+  ```
+  * SUCCESS 200:
+  ```JSON
+  {
+    "access": "dsfsdfsd..."
+  }
+  ```
+
+* logout
+  * Метод: `POST`
+  * URL: `/api/v1/auth/logout/`
+  * Доступ: [IsAuthenticated]
+  * request body JSON:
+  ```JSON
+  {
+    "refresh": "khksdbfkjsdn..."
+  }
+  ```
+  * SUCCESS 200:
+  ```JSON
+  {
+    "status": "success",
+    "message": "Ви успішно лог-аутнулись"
+  }
+  ```
+
 Настільні ігри (каталог) `/games`:
 * список ігор
   * Метод: `GET`
