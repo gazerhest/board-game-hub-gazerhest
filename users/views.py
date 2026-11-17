@@ -5,6 +5,9 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import UserRegisterSerializer, UserSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class RegisterView(APIView):
@@ -14,11 +17,14 @@ class RegisterView(APIView):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            logger.info(f"New register: username='{user.username}' ID={user.id}")
             return Response({
                 "status": "success",
                 "message": "Ви успішно зареєстровані.",
                 "user": UserSerializer(user).data
             }, status=status.HTTP_201_CREATED)
+        fields = list(serializer.errors.keys())
+        logger.warning(f"Failured register, fields: {fields}")
         return Response({
             "status": "error",
             "message": "Виникла помилка при валідації реєстрування",
@@ -32,6 +38,7 @@ class LogoutView(APIView):
         refresh_token = request.data.get('refresh')
 
         if not refresh_token:
+            logger.warning(f"attempt logout without refresh-token (user - '{request.user.username}')")
             return Response({
                 "status": "error",
                 "message": "Для logout потрібно надати рефрещ-токен",
@@ -41,11 +48,13 @@ class LogoutView(APIView):
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
+            logger.info(f"user '{request.user.username}' successfully logouted")
             return Response({
                 "status": "success",
                 "message": "Ви успішно лог-аутнулись"
             }, status=status.HTTP_200_OK)
         except TokenError:
+            logger.warning(f"invalid refresh-token while logout, user - '{request.user.username}'")
             return Response({
                 "status": "error",
                 "message": "недійсний/кривий токен",

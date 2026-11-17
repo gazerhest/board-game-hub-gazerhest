@@ -33,6 +33,69 @@ python manage.py runserver
 
 ---
 
+## Tests/coverage
+Запуск тестів:
+```bash
+pytest -v
+```
+
+coverage:
+```bash
+coverage run -m pytest
+coverage report -m
+```
+
+результат:
+```bash
+Name                               Stmts   Miss  Cover   Missing
+----------------------------------------------------------------
+config\__init__.py                     0      0   100%
+config\exceptions.py                  22     10    55%   16-27
+config\settings.py                    26      0   100%
+config\urls.py                         3      0   100%
+games\__init__.py                      0      0   100%
+games\admin.py                         1      0   100%
+games\apps.py                          3      0   100%
+games\migrations\0001_initial.py       6      0   100%
+games\migrations\__init__.py           0      0   100%
+games\models.py                       49      5    90%   12, 25, 38, 41, 81
+games\permissions.py                   6      0   100%
+games\serializers.py                  68      6    91%   82, 87, 93, 97-99
+games\tests.py                         1      0   100%
+games\urls.py                          3      0   100%
+games\views.py                       231    135    42%   27-29, 32-36, 42-45, 48-52, 55-62, 65-72, 75-82, 91-93, 96-100, 106-109, 112-116, 119-126, 129-136, 139-146, 153-155, 158-162, 168-171, 174-178, 181-188, 191-198, 201-205, 219, 223, 227, 231, 236, 266-273, 278, 283
+tests\conftest.py                     30      0   100%
+tests\test_games.py                   81      0   100%
+users\__init__.py                      0      0   100%
+users\admin.py                         1      0   100%
+users\apps.py                          3      0   100%
+users\migrations\__init__.py           0      0   100%
+users\models.py                        1      0   100%
+users\serializers.py                  32     12    62%   63-65, 68-70, 73-75, 78-86
+users\tests.py                         1      0   100%
+users\urls.py                          4      0   100%
+users\views.py                        27     14    48%   14-22, 32-49
+----------------------------------------------------------------
+TOTAL                                599    182    70%
+```
+
+---
+
+## API documentation
+бібліотека - `drf-spectacular`
+після запуску сервера, до документації можна дістатись по адресі:
+```bash
+http://127.0.0.1:8000/swagger/
+```
+
+генерація OPenAPI-схеми:
+```bash
+http://127.0.0.1:8000/api/scheme/
+```
+або ж натиснути на кнопку `api/scheme` на сторінці документації на Swagger.
+
+---
+
 ## DB schema
 + `users` - користувачі (id, username, email, first_name, last_name, is_staff, created_at).
 + `categories` - жанри/механіки ігор (id, name, slug, description).
