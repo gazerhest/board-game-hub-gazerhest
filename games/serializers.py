@@ -107,4 +107,10 @@ class BoardGameSerializer(serializers.ModelSerializer):
                 "min_players": "Мінімальна кількість гравців не може бути більшою за максимальну"
             })
         return attrs
+
+
+class ErrorResponseSerializer(serializers.Serializer):
+    status = serializers.CharField(default="ERR")
+    message = serializers.CharField()
+    errors = serializers.DictField(required=False, allow_null=True)
     
